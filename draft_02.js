@@ -28,33 +28,26 @@ var zombie = {
   hp: 25,
 }
 
-// gameLoop()
+doRound()
 
-
-
-
-
-
-
-
-function gameLoop() {
-  _devLog('game loop')
-  // while( playerAndZombieAreAlive() ) {               
+function doRound() {
     /* Main Game Loop */
-    var questions = [{type: 'input', name: 'userGuess', message: 'Guess a number.'}]
-    inquirer.prompt(questions)
-      .then(function(answer) {
-        console.log(answer)
-        
-        // Ask player for their guess.
-        //TODO: inquirer.prompt() stuff
-        
-        if ( answer === rollAttack() ) {
+    
+    var question = [{
+      type: 'input', 
+      name: 'userGuess', 
+      message: 'Guess a number betweeb 1 and 5.'
+    }]
+    
+    inquirer.prompt(question)
+      .then( function(answer) {
+
+        if ( parseInt(answer.userGuess) === rollAttack() ) {
           // If the player guesses correctly we reduce zombie health
-          console.log(`You hit the zombie!!`)
+          console.log(`\nYou hit the zombie!!`)
           doDamage(zombie)
         } else {
-          console.log(`The zombie hits you!!`)
+          console.log(`\nThe zombie hits you!!`)
           doDamage(player)
         }
       
@@ -68,34 +61,25 @@ function gameLoop() {
 
         handleEndGame()
     })
-//   }
 }
 
 function handleEndGame() {
-  _devLog(playerKilledZombie())
   if ( playerKilledZombie() ) {
-                                                                            // If playerHP is still above 0 at this point, we assume the zombie died
+    // If playerHP is still above 0 at this point, we assume the zombie died
     return console.log( 'Congrats! You killed the zombie!' )
 
-  } else if ( zombieKilledPlayer() ) {                                      // However, if the playerHP is below 1, we assume the player died
-    
+  } else if ( zombieKilledPlayer() ) {                                      
+    // However, if the playerHP is below 1, we assume the player died
     return console.log( 'Looks like the zombie is eating well today...' )
   }
-  gameLoop()
+  // If both are still alive, do another round
+  doRound()
 }
 
 function doDamage(target) {
   var damage = rollDamage()
   console.log(`--> ${damage} damage!!!`)
   target.hp -= damage
-}
-
-function getUserGuess() {
-  var questions = [{type: 'input', name: 'userGuess', message: 'Guess a number.'}]
-  return inquirer.prompt(questions)
-    .then(function(answer) {
-      return parseInt(answer)
-    })
 }
 
 function rollAttack() {
@@ -112,12 +96,4 @@ function playerKilledZombie() {
 
 function zombieKilledPlayer() {
   return player.hp < 1 && zombie.hp > 0
-}
-
-function playerAndZombieAreAlive() {
-  return player.hp > 0 && zombie.hp > 0
-}
-
-function _devLog( msg ) {
-  console.log(` ---> [DEV LOG] : ${msg}`)
 }

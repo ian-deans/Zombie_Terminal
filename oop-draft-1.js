@@ -79,6 +79,7 @@ Game.prototype.playerAttack = function() {
     this.doRound()
   }
 }
+
 Game.prototype.zombieAttack = function() {
   var damage = Math.floor(Math.random() * 5) + 1
   this.playerHP -= damage
@@ -101,6 +102,4 @@ Game.prototype.HUD = function() {
 
 
 var game = new Game()
-
-
 game.doRound()
